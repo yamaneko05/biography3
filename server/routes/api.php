@@ -17,5 +17,7 @@ Route::middleware('web')->group(function () {
         Route::post('/logout', [AuthController::class, 'logout']);
 
         Route::apiResource('/posts', PostController::class);
+        Route::post('/posts/{post}/like', [PostController::class, 'like']);
+        Route::post('/posts/{post}/unlike', [PostController::class, 'unlike']);
     });
 });

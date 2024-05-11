@@ -6,4 +6,5 @@ export type PostType = {
   user: UserType,
   created_at: string,
   updated_at: string,
+  likes_exists: boolean
 }

@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 
 export default function () {
   return (
-    <div className="container mx-auto flex">
+    <div className="flex">
       <Sidebar />
       <div className="px-2 pb-4">
         <Outlet />

@@ -15,9 +15,6 @@ export default function useCreatePostForm () {
 
   function onSubmit(formData: CreatePostInputsType) {
     mutate(formData);
-    toast(
-      {description: "投稿しました"}
-    )
   }
 
   return {...useForm<CreatePostInputsType>({

@@ -1,9 +1,10 @@
 import Layout from "@/components/layout";
 import Login from "@/features/auth/routes/login";
+import Post from "@/features/posts/routes/post";
 import Posts from "@/features/posts/routes/posts";
 import useLoginUser from "@/features/users/api/get-login-user";
 import Profile from "@/features/users/routes/profile";
-import { Outlet, createBrowserRouter } from "react-router-dom";
+import { Navigate, Outlet, createBrowserRouter } from "react-router-dom";
 
 export default createBrowserRouter([
   {
@@ -31,7 +32,11 @@ export default createBrowserRouter([
           {
             path: "/posts",
             element: <Posts />
-          }
+          },
+          {
+            path: "/posts/:postId",
+            element: <Post />
+          },
         ]
       }
     ]
@@ -39,7 +44,7 @@ export default createBrowserRouter([
 ])
 
 function Protected () {
-  const { data: user } = useLoginUser();
+  const { data: user, isFetched } = useLoginUser();
   
-  return user ? <Outlet /> : null
+  return isFetched ? user ? <Outlet /> : <Navigate to="/login" /> : null
 }

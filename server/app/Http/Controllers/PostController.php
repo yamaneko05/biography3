@@ -14,12 +14,27 @@ class PostController extends Controller
         ->withExists(['likes' => function ($query) use ($request) {
             $query->where('user_id', $request->user()->id);
         }])
+        ->withCount('likes')
+        ->withCount('children')
+        ->whereDoesntHave('parent')
         ->orderBy('created_at', 'desc')->get();
+    }
+
+    public function show (Request $request, Post $post) {
+        return Post::with('user')
+        ->withExists(['likes' => function ($query) use ($request) {
+            $query->where('user_id', $request->user()->id);
+        }])
+        ->withCount('likes')
+        ->withCount('children')
+        ->with('children')
+        ->whereDoesntHave('parent')->findOrfail($post->id);
     }
 
     public function store (Request $request) {
         $post = new Post();
         $post->text = $request->text;
+        $post->parent_id = $request->parent_id;
         $request->user()->posts()->save($post);
 
         return $post;
@@ -35,10 +50,9 @@ class PostController extends Controller
     }
 
     public function unlike (Request $request, Post $post) {
-        $like = Like::where('user_id', $request->user()->id)
-        ->where('post_id', $post->id)->first();
-        $like->delete();
+        Like::where('user_id', $request->user()->id)
+        ->where('post_id', $post->id)->delete();
 
-        return response();
+        return response('');
     }
 }

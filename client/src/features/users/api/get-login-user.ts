@@ -9,6 +9,7 @@ function getLoginUser(): Promise<UserType> {
 export default function useLoginUser() {
   return useQuery({
     queryKey: ["user"],
-    queryFn: getLoginUser
+    queryFn: getLoginUser,
+    retry: false
   })
 }

@@ -16,6 +16,14 @@ class Post extends Model
 {
     use HasFactory;
 
+    public function parent(): BelongsTo {
+        return $this->belongsTo(self::class, 'parent_id');
+    }
+
+    public function children(): HasMany {
+        return $this->hasMany(self::class, 'parent_id');
+    }
+
     public function user(): BelongsTo {
         return $this->belongsTo(User::class);
     }

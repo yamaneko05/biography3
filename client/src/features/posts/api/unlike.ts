@@ -1,9 +1,9 @@
 import { axios } from "@/lib/axios"
 import { queryClient } from "@/lib/query-client";
 
-export default function useLike() {
-  return function (id: number) {
-    axios.post(`/posts/${id}/like`);
+export default function useUnlike() {
+  return async function (id: number) {
+    await axios.post(`/posts/${id}/unlike`);
     queryClient.invalidateQueries({queryKey: ['posts']})
   }
 }

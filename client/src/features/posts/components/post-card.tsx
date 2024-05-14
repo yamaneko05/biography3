@@ -1,9 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { TableRow, TableCell } from "@/components/ui/table";
+import { STORAGE_URL } from "@/constants";
 import useLike from "@/features/posts/api/like";
 import useUnlike from "@/features/posts/api/unlike";
 import { PostType } from "@/features/posts/types"
-import { Heart, MessageSquareMore } from "lucide-react";
+import { Ellipsis, Heart, MessageSquareMore } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export default function ({post}: {
@@ -13,12 +14,18 @@ export default function ({post}: {
   const unlike = useUnlike();
 
   return (
-    <div className="">
+    <div>
       <Link to={`/posts/${post.id}`}>
         <div className="flex justify-between">
-          <div className="font-bold">
-            {post.user.name}・
-            <span className="text-sm">{post.created_at}</span>
+          <div className="flex items-center gap-2">
+            <img src={STORAGE_URL+post.user.icon_file} className="rounded-full w-8 h-8" alt="" />
+            <div className="font-bold">
+              {post.user.name}・
+              <span className="text-sm">{post.created_at}</span>
+            </div>
+          </div>
+          <div className="">
+            <Ellipsis />
           </div>
         </div>
         <div>{post.text}</div>

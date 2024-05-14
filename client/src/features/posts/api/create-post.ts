@@ -12,8 +12,10 @@ function createPost(formData: CreatePostInputsType): Promise<PostType> {
 export default function useCreatePost () {
   return useMutation({
     mutationFn: (formData: CreatePostInputsType) => createPost(formData),
-    onSuccess: () => {
-      queryClient.invalidateQueries({queryKey: ['posts']})
+    onSuccess: (createdPost) => {
+      queryClient.invalidateQueries({
+        queryKey: createdPost.parent_id ? ['post', 'posts'] : ['posts']
+      })
       toast(
         {description: "投稿しました"}
       )

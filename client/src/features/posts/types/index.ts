@@ -9,5 +9,5 @@ export type PostType = {
   likes_exists: boolean,
   likes_count: number,
   children_count: number,
-  children?: PostType[]
+  parent_id?: string
 }

@@ -5,30 +5,35 @@ namespace App\Http\Controllers;
 use App\Models\Like;
 use App\Models\Post;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
     public function index (Request $request) {
-        return Post::with('user')
-        ->withExists(['likes' => function ($query) use ($request) {
+        $parent_id = $request->parent_id;
+
+        return Post::withExists(['likes' => function ($query) use ($request) {
             $query->where('user_id', $request->user()->id);
         }])
         ->withCount('likes')
         ->withCount('children')
-        ->whereDoesntHave('parent')
+        ->when(!$parent_id, function ($query) {
+            $query->whereDoesntHave('parent');
+        })
+        ->when($parent_id, function ($query) use ($parent_id) {
+            $query->where('parent_id', $parent_id);
+        })
         ->orderBy('created_at', 'desc')->get();
     }
 
     public function show (Request $request, Post $post) {
-        return Post::with('user')
-        ->withExists(['likes' => function ($query) use ($request) {
+        return Post::withExists(['likes' => function ($query) use ($request) {
             $query->where('user_id', $request->user()->id);
         }])
         ->withCount('likes')
         ->withCount('children')
-        ->with('children')
-        ->whereDoesntHave('parent')->findOrfail($post->id);
+        ->findOrfail($post->id);
     }
 
     public function store (Request $request) {

@@ -16,6 +16,10 @@ class Post extends Model
 {
     use HasFactory;
 
+    protected $with = [
+        'user'
+    ];
+
     public function parent(): BelongsTo {
         return $this->belongsTo(self::class, 'parent_id');
     }
